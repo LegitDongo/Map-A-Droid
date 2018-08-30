@@ -220,6 +220,11 @@ class RmWrapper:
             setStr = 'SET level = %s, spawn = FROM_UNIXTIME(%s), start = FROM_UNIXTIME(%s), end = FROM_UNIXTIME(%s), ' \
                      'pokemon_id = %s, last_scanned = FROM_UNIXTIME(%s) '
             data = (lvl, captureTime, start, end, pkm, int(time.time()))
+
+            # send out a webhook - this case should only occur once...
+            wh_send = True
+            wh_start = start
+            wh_end = end
         elif end is None or start is None:
             # no end or start time given, just update anything there is
             log.info("Updating without end- or starttime - we should've seen the egg before")
