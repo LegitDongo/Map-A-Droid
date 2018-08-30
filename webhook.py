@@ -37,12 +37,12 @@ webhook_payload = """[{{
 
 
 def get_raid_boss_cp(mon_id):
-    if len(args.pokemon_json_path) > 0 & int(mon_id) > 0:
-        with open(args.pokemon_json_path) as j:
-            file = json.load(j)
+    if int(mon_id) > 0:
+        with open('pokemon.json') as j:
+            pokemonFile = json.load(j)
 
-        if file[str(mon_id)]["cp"]:
-            return file[str(mon_id)]["cp"]
+        if 'cp' in pokemonFile[str(mon_id)]:
+            return pokemonFile[str(mon_id)]["cp"]
         else:
             log.warning("No raid cp found for " + str(mon_id))
             return '0'
@@ -50,7 +50,7 @@ def get_raid_boss_cp(mon_id):
         return '0'
 
 
-def send_webhook(gymid, type, start, end, lvl, mon=0):
+def send_webhook(gymid, start, end, lvl, mon=0):
     gym_id = gymid
     move_1 = '1'
     move_2 = '1'

@@ -178,8 +178,6 @@ def parseArgs():
                         help='Active webhook support')
     parser.add_argument('-whurl', '--webhook_url', default='',
                         help='URL to receive webhooks')
-    parser.add_argument('-pjp', '--pokemon_json_path', default='',
-                        help=('Enable Webhooks to report the CP of raid bosses from the Pokemon.json'))
 
     # log settings
     parser.add_argument('--no-file-logs',

@@ -111,4 +111,3 @@ timezone:                    # Time difference from UTC+-0 (f.e +2 for Berlin/Ge
 
 #webhook                     # active support for webhook
 #webhook_url:                # URL endpoint for your webhook - beginning with http://
-#pokemon_json_path           # Location of Pokemon.json that you can find in PMSF/static/data/
