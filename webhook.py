@@ -83,10 +83,12 @@ def send_webhook(gymid, type, start, end, lvl, mon=0):
         if data[str(gymid)]["description"]:
             description = data[str(gymid)]["description"].replace("\\", r"\\").replace('"', '').replace("\n", "")
 
-        if data[str(gymid)]["park"]:
+        # if data[str(gymid)]["park"]:
+        if 'park' in data[str(gymid)]:
             park = data[str(gymid)]["park"]
 
-        if data[str(gymid)]["sponsor"]:
+        # if data[str(gymid)]["sponsor"]:
+        if 'sponsor' in data[str(gymid)]:
             sponsor = data[str(gymid)]["sponsor"]
 
     if args.webhook:
