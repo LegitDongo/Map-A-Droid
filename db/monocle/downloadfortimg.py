@@ -64,7 +64,7 @@ def main():
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
-    query = ("SELECT forts.id, forts.lat, forts.lon, forts.name, forts.url, forts.park, forts.sponsor FROM forts")
+    query = ("SELECT forts.id, forts.lat, forts.lon, forts.name, forts.url, IFNULL(forts.park, 'unknown'), forts.sponsor FROM forts")
     cursor = connection.cursor()
     cursor.execute(query)
 
@@ -73,7 +73,7 @@ def main():
             filename = url_image_path + '_' + str(id) + '_.jpg'
             print('Downloading', filename)
             download_img(str(url), str(filename))
-            encodeHashJson(id, '0', lat, lon, name, url, park,sponsor)
+            encodeHashJson(id, '0', lat, lon, name, url, park, sponsor)
     cursor.close()
     connection.close()
     with io.open('gym_info.json', 'w', encoding='UTF-8') as outfile:
