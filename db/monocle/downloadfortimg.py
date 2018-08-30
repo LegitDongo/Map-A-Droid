@@ -32,8 +32,8 @@ except:
     print ("Keine Verbindung zum Server")
     exit(0)
 
-def encodeHashJson(id, team_id, latitude, longitude, name, url):
-    gyminfo[id] = ({'team_id': team_id, 'latitude': latitude, 'longitude': longitude, 'name': name, 'description': '', 'url': url})
+def encodeHashJson(id, team_id, latitude, longitude, name, url, park, sponsor):
+    gyminfo[id] = ({'team_id': team_id, 'latitude': latitude, 'longitude': longitude, 'name': name, 'description': '', 'url': url, 'park': park, 'sponsor': sponsor})
     
 
 def download_img(url, file_name):
@@ -64,16 +64,16 @@ def main():
     if not os.path.exists(file_path):
         os.makedirs(file_path)
 
-    query = ("SELECT forts.id, forts.lat, forts.lon, forts.name, forts.url FROM forts")
+    query = ("SELECT forts.id, forts.lat, forts.lon, forts.name, forts.url, forts.park, forts.sponsor FROM forts")
     cursor = connection.cursor()
     cursor.execute(query)
 
-    for (id, lat, lon, name, url) in cursor:
+    for (id, lat, lon, name, url, park, sponsor) in cursor:
         if url is not None:
             filename = url_image_path + '_' + str(id) + '_.jpg'
             print('Downloading', filename)
             download_img(str(url), str(filename))
-            encodeHashJson(id, '0', lat, lon, name, url)
+            encodeHashJson(id, '0', lat, lon, name, url, park,sponsor)
     cursor.close()
     connection.close()
     with io.open('gym_info.json', 'w', encoding='UTF-8') as outfile:

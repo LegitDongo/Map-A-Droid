@@ -178,8 +178,8 @@ def parseArgs():
                         help='Active webhook support')
     parser.add_argument('-whurl', '--webhook_url', default='',
                         help='URL to receive webhooks')
-    parser.add_argument('-whtype', '--webhook_type', default=[], action='append',
-                        help='Select types of webhook f.e. [PA_gyminfos, PA_raid, other]')
+    parser.add_argument('-pjp', '--pokemon_json_path', default='',
+                        help=('Enable Webhooks to report the CP of raid bosses from the Pokemon.json'))
 
     # log settings
     parser.add_argument('--no-file-logs',
@@ -199,6 +199,10 @@ def parseArgs():
     parser.add_argument('-sn', '--status-name', default=str(os.getpid()),
                         help=('Enable status page database update using ' +
                               'STATUS_NAME as main worker name.'))
+
+
+
+
     verbose = parser.add_mutually_exclusive_group()
     verbose.add_argument('-v',
                          help='Show debug messages',
