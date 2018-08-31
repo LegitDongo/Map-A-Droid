@@ -2,8 +2,6 @@ import logging
 from walkerArgs import parseArgs
 import requests
 import json
-import datetime
-import time
 import sys
 
 reload(sys)
@@ -39,10 +37,10 @@ webhook_payload = """[{{
 def get_raid_boss_cp(mon_id):
     if int(mon_id) > 0:
         with open('pokemon.json') as j:
-            pokemonFile = json.load(j)
+            pokemon_file = json.load(j)
 
-        if 'cp' in pokemonFile[str(mon_id)]:
-            return pokemonFile[str(mon_id)]["cp"]
+        if 'cp' in pokemon_file[str(mon_id)]:
+            return pokemon_file[str(mon_id)]["cp"]
         else:
             log.warning("No raid cp found for " + str(mon_id))
             return '0'
@@ -52,73 +50,73 @@ def get_raid_boss_cp(mon_id):
 
 
 def send_webhook(gymid, type, start, end, lvl, mon=0):
-
+    log.info('Start preparing web hook')
+    
     if mon is None:
         poke_id = 0
     else:
         poke_id = mon
-    log.info('poke_id: ' + str(poke_id))
+    log.debug('poke_id: ' + str(poke_id))
 
-    log.info('Start preparing web hook')
     gym_id = gymid
-    log.info('gym_id: ' + str(gym_id))
+    log.debug('gym_id: ' + str(gym_id))
     move_1 = '1'
-    log.info('move_1: ' + str(move_1))
+    log.debug('move_1: ' + str(move_1))
     move_2 = '1'
-    log.info('move_2: ' + str(move_2))
+    log.debug('move_2: ' + str(move_2))
     cp = get_raid_boss_cp(poke_id)
-    log.info('cp: ' + str(cp))
+    log.debug('cp: ' + str(cp))
     lvl = lvl
-    log.info('lvl: ' + str(lvl))
+    log.debug('lvl: ' + str(lvl))
     hatch_time = int(start)
-    log.info('hatch_time: ' + str(hatch_time))
+    log.debug('hatch_time: ' + str(hatch_time))
     end = int(end)
-    log.info('end: ' + str(end))
+    log.debug('end: ' + str(end))
     form = '0'
-    log.info('form: ' + str(form))
+    log.debug('form: ' + str(form))
     team = '0'
-    log.info('team: ' + str(team))
+    log.debug('team: ' + str(team))
     type_ = 'raid'
-    log.info('type_: ' + str(type_))
+    log.debug('type_: ' + str(type_))
     sponsor = '0'
-    log.info('sponsor: ' + str(sponsor))
+    log.debug('sponsor: ' + str(sponsor))
     weather = '0'
-    log.info('weather: ' + str(weather))
+    log.debug('weather: ' + str(weather))
     park = 'unknown'
-    log.info('park: ' + str(park))
+    log.debug('park: ' + str(park))
 
     with open('gym_info.json') as f:
         data = json.load(f)
 
     name = 'unknown'
-    log.info('name: ' + str(name))
+    log.debug('name: ' + str(name))
     lat = '0'
-    log.info('lat: ' + str(lat))
+    log.debug('lat: ' + str(lat))
     lon = '0'
-    log.info('lon: ' + str(lon))
+    log.debug('lon: ' + str(lon))
     url = '0'
-    log.info('url: ' + str(url))
+    log.debug('url: ' + str(url))
     description = ''
-    log.info('description: ' + str(description))
+    log.debug('description: ' + str(description))
 
     if str(gymid) in data:
         name = data[str(gymid)]["name"].replace("\\", r"\\").replace('"', '')
-        log.info('data_name: ' + str(name))
+        log.debug('data_name: ' + str(name))
         lat = data[str(gymid)]["latitude"]
-        log.info('data_lat: ' + str(end))
+        log.debug('data_lat: ' + str(end))
         lon = data[str(gymid)]["longitude"]
-        log.info('data_lat: ' + str(end))
+        log.debug('data_lat: ' + str(end))
         url = data[str(gymid)]["url"]
-        log.info('data_url: ' + str(end))
+        log.debug('data_url: ' + str(end))
         if data[str(gymid)]["description"]:
             description = data[str(gymid)]["description"].replace("\\", r"\\").replace('"', '').replace("\n", "")
-            log.info('data_description: ' + str(description))
+            log.debug('data_description: ' + str(description))
         if 'park' in data[str(gymid)]:
             park = data[str(gymid)]["park"]
-            log.info('data_park: ' + str(park))
+            log.debug('data_park: ' + str(park))
         if 'sponsor' in data[str(gymid)]:
             sponsor = data[str(gymid)]["sponsor"]
-            log.info('data_sponsor: ' + str(sponsor))
+            log.debug('data_sponsor: ' + str(sponsor))
 
     if args.webhook:
         payload_raw = webhook_payload.format(
@@ -143,14 +141,20 @@ def send_webhook(gymid, type, start, end, lvl, mon=0):
             weather=weather
         )
 
-        log.info(payload_raw)
+        log.debug(payload_raw)
 
         payload = json.loads(payload_raw)
         response = requests.post(
             args.webhook_url, data=json.dumps(payload),
             headers={'Content-Type': 'application/json'}
         )
+        if response.status_code == 200:
+            log.info("Webhook sent successful for " + type + " gym_id " + str(gym_id))
+        else:
+            log.error(str(response.status_code) + " - there was an issue sending to the webhook!")
+            log.error(response)
+
 
 
 if __name__ == '__main__':
-    send_webhook('33578092c5554275a589bd1e144bbbcc.16', 'EGG', '1534163280', '1534165980', '5', '004')
+    send_webhook('33578092c5554275a589bd1e144bbbcc.16', 'EGG', '1534163280', '1534165980', '5', 004)
