@@ -247,6 +247,11 @@ class RmWrapper:
                      'last_scanned = FROM_UNIXTIME(%s) '
             data = (lvl, captureTime, start, end, pkm, int(time.time()))
 
+            wh_send = True
+            wh_start = start
+            wh_end = end
+
+
         query = updateStr + setStr + whereStr
         log.debug(query % data)
         cursor.execute(query, data)
@@ -255,7 +260,7 @@ class RmWrapper:
         cursor.close()
         if affectedRows == 0 and not eggHatched:
             # we need to insert the raid...
-            log.info("Gotta insert")
+            log.info("Got to insert")
             if MonWithNoEgg:
                 # submit mon without egg info -> we have an endtime
                 log.info("Inserting mon without egg")
