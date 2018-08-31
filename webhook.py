@@ -47,6 +47,7 @@ def get_raid_boss_cp(mon_id):
             log.warning("No raid cp found for " + str(mon_id))
             return '0'
     else:
+        log.debug("No CP returns as its an egg!")
         return '0'
 
 
