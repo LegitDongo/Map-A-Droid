@@ -51,6 +51,13 @@ def get_raid_boss_cp(mon_id):
 
 
 def send_webhook(gymid, type, start, end, lvl, mon=0):
+
+    if mon is None:
+        poke_id = 0
+    else:
+        poke_id = mon
+    log.info('poke_id: ' + str(poke_id))
+
     log.info('Start preparing web hook')
     gym_id = gymid
     log.info('gym_id: ' + str(gym_id))
@@ -58,12 +65,10 @@ def send_webhook(gymid, type, start, end, lvl, mon=0):
     log.info('move_1: ' + str(move_1))
     move_2 = '1'
     log.info('move_2: ' + str(move_2))
-    cp = get_raid_boss_cp(mon)
+    cp = get_raid_boss_cp(poke_id)
     log.info('cp: ' + str(cp))
     lvl = lvl
     log.info('lvl: ' + str(lvl))
-    poke_id = int(mon)
-    log.info('poke_id: ' + str(poke_id))
     hatch_time = int(start)
     log.info('hatch_time: ' + str(hatch_time))
     end = int(end)
